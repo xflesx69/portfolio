@@ -25,7 +25,6 @@
       const name = ref(names[nameIndex.value]);
       const nameKey = ref(0);
       
-      // Define birthDate and calculate age as reactive properties
       const birthDate = new Date(2008, 9, 29);
       const age = computed(() => {
         const today = new Date();
@@ -70,22 +69,18 @@
   }
   
   h1 {
-    margin: 0;
-  }
-  
-  .name-wrapper {
-    display: inline-block;
-    overflow: hidden;
-    position: relative;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-left: 15px; 
+    width: 800px; 
   }
   
   .swipename {
     display: inline-block;
-    position: absolute;
-    top: 0;
-    left: 0;
+    width: 170px; 
     animation: swipe 1.8s ease-in-out forwards;
-    white-space: nowrap;
   }
   
   @keyframes swipe {
@@ -106,4 +101,3 @@
     }
   }
   </style>
-  
