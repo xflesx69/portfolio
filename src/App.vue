@@ -1,85 +1,75 @@
-<script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div class="container">
+    <Header></Header>
+    <div class="cursor" ref="cursor"></div>
+    <RouterView v-slot="{ Component }">
+      <Transition name="grow-in">
+        <component :is="Component" />
+      </Transition>
+    </RouterView>
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script lang="ts">
+import { defineComponent, onMounted, ref } from 'vue';
+import { RouterView } from 'vue-router';
+import Header from '@/components/Header.vue';
+
+export default defineComponent({
+  name: 'App',
+  components: {
+    Header
+  },
+  setup() {
+    const cursor = ref<HTMLElement | null>(null);
+
+    onMounted(() => {
+      const handleMouseMove = (e: MouseEvent) => {
+        if (cursor.value) {
+          cursor.value.style.left = `${e.pageX}px`;
+          cursor.value.style.top = `${e.pageY}px`;
+        }
+      };
+
+      document.addEventListener('mousemove', handleMouseMove);
+
+      return () => {
+        document.removeEventListener('mousemove', handleMouseMove);
+      };
+    });
+
+    return {
+      cursor,
+    };
+  },
+});
+
+</script>
+
+<style>
+.slide-up-enter-active,
+.slide-up-leave-active {
+  transition: all 0.15s ease-out;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.slide-up-enter-from {
+  opacity: 0;
+  transform: scale(8px);
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+.slide-up-leave-to {
+  opacity: 0;
+  transform: scale(8px);
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+.grow-in-enter-from,
+.grow-in-leave-to {
+  opacity: 0;
+  transform: scale(0.3);
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
-}
-
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.grow-in-enter-active,
+.grow-in-leave-active {
+  transition: 0.3s ease-out;
 }
 </style>

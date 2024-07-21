@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@font-face {
+    font-family: coolvetica;
+    src: url('/fonts/coolvetica.otf');
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: "Nunito", sans-serif;
+    cursor: none;
+}
+
+.cursor {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: black;
+    position: absolute;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 10000;
+    transition: transform 0.1s ease-out;
+}
+
+/* .trail {
+    position: absolute;
+    background-color: rgba(0,0,0,0.1);
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+} */
+
+.container {
+    background: linear-gradient(to top left, #eeeeee 0%, #f5f5f5 100%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 35px;
+    padding: 5px;
+    border-radius: 15px;
+    height: calc(100vh - 70px);
+    min-height: 100%;
+}
+
+.header {
+    display: flex;
+    .infocard {
+        padding-top: 10px;
+        padding-left: 30px;
+        display: block;
+        .name {
+            letter-spacing: -1px;
+            font-weight: 560;
+        }
+        .desc {
+            letter-spacing: -.3px;
+            font-weight: 200;
+            font-size: small;
+            padding-top: 1px;
+            color: #525252;
+        }
+    }
+}
