@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref, onBeforeUnmount } from 'vue';
+import { defineComponent, onMounted, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
 
@@ -24,48 +24,67 @@ export default defineComponent({
     const cursor = ref<HTMLElement | null>(null);
     let mouseX = 0;
     let mouseY = 0;
-    let cursorX = 0;
-    let cursorY = 0;
-    const speed = 0.5;
+    let hideTimeout: ReturnType<typeof setTimeout>;
 
     const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.pageX;
       mouseY = e.pageY;
 
-      const target = e.target as HTMLElement;
-      if (target && target.tagName === 'TEXT' || target.tagName === 'A' || target.tagName === 'SPAN' || target.tagName === 'P') {
-        if (cursor.value) {
-          cursor.value.style.width = '5px';
-          cursor.value.style.height = '16px';
-          cursor.value.style.borderRadius = '0';
-        }
-      } else {
-        if (cursor.value) {
-          cursor.value.style.width = '10px';
-          cursor.value.style.height = '10px';
-          cursor.value.style.borderRadius = '50%';
-        }
-      }
-    };
-
-    const animateCursor = () => {
-      cursorX += (mouseX - cursorX) * speed;
-      cursorY += (mouseY - cursorY) * speed;
-
       if (cursor.value) {
-        cursor.value.style.left = `${cursorX}px`;
-        cursor.value.style.top = `${cursorY}px`;
+        cursor.value.style.left = `${mouseX}px`;
+        cursor.value.style.top = `${mouseY}px`;
+        cursor.value.style.transition = 'width 0.3s, height 0.3s, background-color 0.3s, border-width 0.3s';
       }
 
-      requestAnimationFrame(animateCursor);
+      const target = e.target as HTMLElement;
+      if (target) {
+        if (['A', 'SPAN', 'P', 'H1'].includes(target.tagName) || target.id === 'button') {
+          if (cursor.value) {
+            if (target.id === 'button') {
+              cursor.value.style.width = '35px';
+              cursor.value.style.height = '35px';
+              cursor.value.style.borderRadius = '50%';
+              cursor.value.style.borderWidth = '1.5px';
+              cursor.value.style.backgroundColor = '';
+            } else {
+              cursor.value.style.width = '.2px';
+              cursor.value.style.height = '15px';
+              cursor.value.style.borderRadius = '10%';
+              cursor.value.style.borderWidth = '.1px';
+              cursor.value.style.backgroundColor = 'black';
+            }
+          }
+        } else {
+          if (cursor.value) {
+            cursor.value.style.width = '15px';
+            cursor.value.style.height = '15px';
+            cursor.value.style.borderRadius = '50%';
+            cursor.value.style.borderWidth = '1.9px';
+            cursor.value.style.backgroundColor = '';
+          }
+        }
+      }
+
+      if (hideTimeout) {
+        clearTimeout(hideTimeout);
+      }
+
+      hideTimeout = setTimeout(() => {
+        if (cursor.value) {
+          cursor.value.style.width = '0px';
+          cursor.value.style.height = '0px';
+        }
+      }, 800); 
     };
 
     onMounted(() => {
       document.addEventListener('mousemove', handleMouseMove);
-      animateCursor();
 
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
+        if (hideTimeout) {
+          clearTimeout(hideTimeout);
+        }
       };
     });
 

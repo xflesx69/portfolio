@@ -5,7 +5,7 @@
             <p class="desc">Website developer</p>
         </div>
         <div class="nav">
-            <a href="#"><i class="fa-solid fa-bars"></i></a>
+            <a href="#" id="button"><i id="button" class="fa-solid fa-bars"></i></a>
         </div>
     </main>
 </template>
