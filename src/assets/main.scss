@@ -1,9 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap");
 @font-face {
-    font-family: coolvetica;
-    src: url('/fonts/coolvetica.otf');
+    font-family: Akira;
+    src: url("/fonts/Akira.otf");
 }
-
 * {
     margin: 0px;
     padding: 0px;
@@ -11,12 +10,10 @@
     cursor: none;
     overflow: hidden;
 }
-
 *::selection {
     background-color: #afafaf;
     color: rgb(0, 0, 0);
 }
-
 .cursor {
     width: 10px;
     height: 10px;
@@ -26,9 +23,11 @@
     pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: 10000;
-    transition: width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out;
-  }
-
+    transition:
+        width 0.1s ease-out,
+        height 0.1s ease-out,
+        border-radius 0.1s ease-out;
+}
 /* .trail {
     position: absolute;
     background-color: rgba(0,0,0,0.1);
@@ -38,7 +37,6 @@
     pointer-events: none;
     z-index: 9999;
 } */
-
 .container {
     background: linear-gradient(to top left, #e7e7e7 0%, #f5f5f5 100%);
     background-position: center;
@@ -55,47 +53,135 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 30px;
-
+    color: rgb(37, 37, 37);
     .infocard {
         display: block;
-
         .name {
             letter-spacing: -1px;
             font-weight: 560;
             font-size: 20px;
+            font-family: Arial, Helvetica, sans-serif;
         }
 
         .desc {
-            letter-spacing: -.3px;
+            letter-spacing: -0.3px;
             font-weight: 250;
             font-size: 15px;
             color: #525252;
         }
     }
-
     .nav {
-        margin-left: auto; 
+        margin-left: auto;
         display: flex;
         align-items: center;
         a {
-            color: black;
+            color: rgb(37, 37, 37);
         }
         #button {
             font-size: 20px;
         }
     }
 }
-.home {  
+.home {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
     h1 {
-        font-size: 40px;
+        font-size: 30px;
+        font-family: Akira;
+        display: inline-flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-left: 15px;
+        width: 800px;
+        .swipename {
+            display: inline-block;
+            width: 230px;
+            animation: swipe 1.8s ease-in-out forwards;
+        }
+    }
+    span {
+        font-family: Akira;
     }
     p {
         font-size: 15px;
-        letter-spacing: -.3px;
+        letter-spacing: -0.3px;
     }
-  }
+    @keyframes swipe {
+        0% {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        30% {
+            opacity: 1;
+            transform: translateY(4px);
+        }
+        80% {
+            opacity: 1;
+            transform: translateY(4px);
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    box-sizing: border-box;
+    padding-top: calc(91vh - 70px);
+    @media (max-width: 1920px) {
+        padding-top: calc(89vh - 70px);
+    }
+    @media (max-width: 1536px) {
+        padding-top: calc(87vh - 70px);
+    }
+    @media (max-width: 1440px) {
+        padding-top: calc(87vh - 70px);
+    }
+    @media (max-width: 1372px) {
+        padding-top: calc(85.5vh - 70px);
+    }
+    @media (max-width: 1280px) {
+        padding-top: calc(84vh - 70px);
+    }
+    @media (max-width: 1098px) {
+        padding-top: calc(82vh - 70px);
+    }
+    @media (max-width: 960px) {
+        padding-top: calc(80vh - 70px);
+    }
+    @media (max-width: 769px) {
+        padding-top: calc(75vh - 70px);
+    }
+    @media (max-width: 640px) {
+        padding-top: calc(70vh - 70px);
+    }
+    @media (max-width: 480px) {
+        padding-top: calc(62vh - 70px);
+    }
+    .left,
+    .right {
+        font-size: 14px;
+        color: #333;
+        .icons {
+            display: flex;
+            a {
+                color: black;
+            }
+            i {
+                padding-left: 15px;
+                font-size: 20px;
+            }
+        }
+    }
+    .right {
+        text-align: right;
+    }
+    
+}

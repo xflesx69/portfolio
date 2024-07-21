@@ -8,7 +8,7 @@
           </span>
         </h1>
         <p>
-          I'm a {{ age }} years old information technology and telecommunications student. Currently, I'm learning Vue.js and Go. I have a strong interest in web development and backend programming, and I'm passionate about building efficient applications.
+          I'm a {{ age }} years old information technology and telecommunications student. <br>Currently, I'm learning Vue.js and Go. I have a strong interest in web development and backend programming, and I'm passionate about building efficient applications.
         </p>
       </div>
     </main>
@@ -57,47 +57,3 @@
     }
   });
   </script>
-  
-  <style lang="scss">
-  .home {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-  }
-  
-  h1 {
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-left: 15px; 
-    width: 800px; 
-  }
-  
-  .swipename {
-    display: inline-block;
-    width: 170px; 
-    animation: swipe 1.8s ease-in-out forwards;
-  }
-  
-  @keyframes swipe {
-    0% {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-    30% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    80% {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    100% {
-      opacity: 0;
-    }
-  }
-  </style>

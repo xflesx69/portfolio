@@ -7,6 +7,7 @@
         <component :is="Component" />
       </Transition>
     </RouterView>
+    <Footer></Footer>
   </div>
 </template>
 
@@ -14,11 +15,13 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
+import Footer from '@/components/Footer.vue';
 
 export default defineComponent({
   name: 'App',
   components: {
-    Header
+    Header,
+    Footer
   },
   setup() {
     const cursor = ref<HTMLElement | null>(null);
@@ -44,7 +47,7 @@ export default defineComponent({
               cursor.value.style.width = '35px';
               cursor.value.style.height = '35px';
               cursor.value.style.borderRadius = '50%';
-              cursor.value.style.borderWidth = '1.5px';
+              cursor.value.style.borderWidth = '1.9px';
               cursor.value.style.backgroundColor = '';
             } else {
               cursor.value.style.width = '.2px';
