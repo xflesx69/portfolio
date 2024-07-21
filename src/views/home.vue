@@ -2,7 +2,10 @@
     <main>
       <div class="home">
         <h1>
-          Hello, my name is <span class="swipename" :key="nameKey">{{ name }}</span>
+          Hello, my name is 
+          <span class="name-wrapper">
+            <span class="swipename" :key="nameKey">{{ name }}</span>
+          </span>
         </h1>
         <p>
           I'm a {{ age }} years old information technology and telecommunications student. Currently, I'm learning Vue.js and Go. I have a strong interest in web development and backend programming, and I'm passionate about building efficient applications.
@@ -12,7 +15,7 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { defineComponent, onMounted, ref, computed } from 'vue';
   
   export default defineComponent({
     name: 'Home',
@@ -21,6 +24,21 @@
       const nameIndex = ref(0);
       const name = ref(names[nameIndex.value]);
       const nameKey = ref(0);
+      
+      // Define birthDate and calculate age as reactive properties
+      const birthDate = new Date(2008, 9, 29);
+      const age = computed(() => {
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+        const dayDifference = today.getDate() - birthDate.getDate();
+  
+        if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
+          age--;
+        }
+  
+        return age;
+      });
   
       const changeName = () => {
         nameIndex.value = (nameIndex.value + 1) % names.length;
@@ -35,24 +53,8 @@
       return {
         name,
         nameKey,
-        birthDate: new Date(2008, 9, 29),
-        age: 0,
-        calculateAge() {
-          const today = new Date();
-          let age = today.getFullYear() - this.birthDate.getFullYear();
-          const monthDifference = today.getMonth() - this.birthDate.getMonth();
-          const dayDifference = today.getDate() - this.birthDate.getDate();
-  
-          if (monthDifference < 0 || (monthDifference === 0 && dayDifference < 0)) {
-            age--;
-          }
-  
-          this.age = age;
-        }
+        age
       };
-    },
-    created() {
-      this.calculateAge();
     }
   });
   </script>
@@ -68,18 +70,22 @@
   }
   
   h1 {
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    margin-left: 15px; 
-    width: 800px; 
+    margin: 0;
+  }
+  
+  .name-wrapper {
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
   }
   
   .swipename {
     display: inline-block;
-    width: 170px; 
+    position: absolute;
+    top: 0;
+    left: 0;
     animation: swipe 1.8s ease-in-out forwards;
+    white-space: nowrap;
   }
   
   @keyframes swipe {
