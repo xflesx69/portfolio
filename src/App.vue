@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, onBeforeUnmount } from 'vue';
 import { RouterView } from 'vue-router';
 import Header from '@/components/Header.vue';
 
@@ -22,16 +22,47 @@ export default defineComponent({
   },
   setup() {
     const cursor = ref<HTMLElement | null>(null);
+    let mouseX = 0;
+    let mouseY = 0;
+    let cursorX = 0;
+    let cursorY = 0;
+    const speed = 0.5;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseX = e.pageX;
+      mouseY = e.pageY;
+
+      const target = e.target as HTMLElement;
+      if (target && target.tagName === 'TEXT' || target.tagName === 'A' || target.tagName === 'SPAN' || target.tagName === 'P') {
+        if (cursor.value) {
+          cursor.value.style.width = '5px';
+          cursor.value.style.height = '16px';
+          cursor.value.style.borderRadius = '0';
+        }
+      } else {
+        if (cursor.value) {
+          cursor.value.style.width = '10px';
+          cursor.value.style.height = '10px';
+          cursor.value.style.borderRadius = '50%';
+        }
+      }
+    };
+
+    const animateCursor = () => {
+      cursorX += (mouseX - cursorX) * speed;
+      cursorY += (mouseY - cursorY) * speed;
+
+      if (cursor.value) {
+        cursor.value.style.left = `${cursorX}px`;
+        cursor.value.style.top = `${cursorY}px`;
+      }
+
+      requestAnimationFrame(animateCursor);
+    };
 
     onMounted(() => {
-      const handleMouseMove = (e: MouseEvent) => {
-        if (cursor.value) {
-          cursor.value.style.left = `${e.pageX}px`;
-          cursor.value.style.top = `${e.pageY}px`;
-        }
-      };
-
       document.addEventListener('mousemove', handleMouseMove);
+      animateCursor();
 
       return () => {
         document.removeEventListener('mousemove', handleMouseMove);
@@ -43,33 +74,4 @@ export default defineComponent({
     };
   },
 });
-
 </script>
-
-<style>
-.slide-up-enter-active,
-.slide-up-leave-active {
-  transition: all 0.15s ease-out;
-}
-
-.slide-up-enter-from {
-  opacity: 0;
-  transform: scale(8px);
-}
-
-.slide-up-leave-to {
-  opacity: 0;
-  transform: scale(8px);
-}
-
-.grow-in-enter-from,
-.grow-in-leave-to {
-  opacity: 0;
-  transform: scale(0.3);
-}
-
-.grow-in-enter-active,
-.grow-in-leave-active {
-  transition: 0.3s ease-out;
-}
-</style>

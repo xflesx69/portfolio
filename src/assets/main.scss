@@ -9,6 +9,7 @@
     padding: 0px;
     font-family: "Nunito", sans-serif;
     cursor: none;
+    overflow: hidden;
 }
 
 .cursor {
@@ -20,8 +21,8 @@
     pointer-events: none;
     transform: translate(-50%, -50%);
     z-index: 10000;
-    transition: transform 0.1s ease-out;
-}
+    transition: width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out;
+  }
 
 /* .trail {
     position: absolute;
@@ -44,23 +45,34 @@
     height: calc(100vh - 70px);
     min-height: 100%;
 }
-
 .header {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+
     .infocard {
-        padding-top: 10px;
-        padding-left: 30px;
         display: block;
+
         .name {
             letter-spacing: -1px;
             font-weight: 560;
         }
+
         .desc {
             letter-spacing: -.3px;
             font-weight: 200;
-            font-size: small;
-            padding-top: 1px;
+            font-size: 12px;
             color: #525252;
+        }
+    }
+
+    .nav {
+        margin-left: auto; 
+        display: flex;
+        align-items: center;
+        a {
+            color: black;
         }
     }
 }
