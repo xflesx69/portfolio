@@ -43,7 +43,6 @@
     background-repeat: no-repeat;
     background-size: cover;
     margin: 25px;
-    padding: 5px;
     border-radius: 15px;
     height: calc(100vh - 70px);
     min-height: 100%;
@@ -52,7 +51,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 30px;
+    padding: 20px 30px;
     color: rgb(37, 37, 37);
     .infocard {
         display: block;
@@ -132,38 +131,40 @@
 .footer {
     display: flex;
     justify-content: space-between;
-    padding: 5px;
     box-sizing: border-box;
-    padding-top: calc(91vh - 70px);
+    padding-top: calc(88vh - 70px);
     @media (max-width: 1920px) {
-        padding-top: calc(89vh - 70px);
+        padding-top: calc(87vh - 70px);
     }
     @media (max-width: 1536px) {
-        padding-top: calc(87vh - 70px);
-    }
-    @media (max-width: 1440px) {
-        padding-top: calc(87vh - 70px);
-    }
-    @media (max-width: 1372px) {
-        padding-top: calc(85.5vh - 70px);
-    }
-    @media (max-width: 1280px) {
         padding-top: calc(84vh - 70px);
     }
+    @media (max-width: 1440px) {
+        padding-top: calc(84vh - 70px);
+    }
+    @media (max-width: 1372px) {
+        padding-top: calc(82.5vh - 70px);
+    }
+    @media (max-width: 1320px) {
+        padding-top: calc(80.5vh - 70px);
+    }
+    @media (max-width: 1280px) {
+        padding-top: calc(81vh - 70px);
+    }
     @media (max-width: 1098px) {
-        padding-top: calc(82vh - 70px);
+        padding-top: calc(77vh - 70px);
     }
     @media (max-width: 960px) {
-        padding-top: calc(80vh - 70px);
-    }
-    @media (max-width: 769px) {
         padding-top: calc(75vh - 70px);
     }
+    @media (max-width: 769px) {
+        padding-top: calc(68vh - 70px);
+    }
     @media (max-width: 640px) {
-        padding-top: calc(70vh - 70px);
+        padding-top: calc(62vh - 70px);
     }
     @media (max-width: 480px) {
-        padding-top: calc(62vh - 70px);
+        padding-top: calc(50vh - 70px);
     }
     .left,
     .right {
@@ -182,6 +183,13 @@
     }
     .right {
         text-align: right;
+        margin-left: auto;
+        margin-right: -50px; 
+        display: flex; 
+        align-items: center;
+    }
+    .right svg {
+        margin-left: 50px; 
     }
     
 }

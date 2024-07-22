@@ -2,13 +2,13 @@
     <main>
       <div class="home">
         <h1>
-          Hello, my name is 
+          {{ t('home.myname') }}
           <span class="name-wrapper">
             <span class="swipename" :key="nameKey">{{ name }}</span>
           </span>
         </h1>
         <p>
-          I'm a {{ age }} years old information technology and telecommunications student. <br>Currently, I'm learning Vue.js and Go. I have a strong interest in web development and backend programming, and I'm passionate about building efficient applications.
+          {{ t('home.ima') }} {{ age }} {{ t('home.desc') }} <br>  {{ t('home.desc2') }}
         </p>
       </div>
     </main>
@@ -16,6 +16,7 @@
   
   <script lang="ts">
   import { defineComponent, onMounted, ref, computed } from 'vue';
+  import { t } from '@/languages/i18n';
   
   export default defineComponent({
     name: 'Home',
@@ -52,7 +53,8 @@
       return {
         name,
         nameKey,
-        age
+        age,
+        t
       };
     }
   });
