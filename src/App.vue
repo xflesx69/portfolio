@@ -43,7 +43,7 @@ export default defineComponent({
       if (target) {
         if (['A', 'SPAN', 'P', 'H1'].includes(target.tagName) || target.id === 'button') {
           if (cursor.value) {
-            if (target.id === 'button') {
+            if (target.id === 'button' || ['G'].includes(target.tagName)) {
               cursor.value.style.width = '35px';
               cursor.value.style.height = '35px';
               cursor.value.style.borderRadius = '50%';

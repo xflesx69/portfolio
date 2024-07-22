@@ -80,6 +80,82 @@
             font-size: 20px;
         }
     }
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        opacity: 0;
+        visibility: hidden;
+        transition:
+        opacity 0.3s,
+        visibility 0.3s;
+        z-index: 9999;
+        animation: ShowSideNavOverlay 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        @keyframes ShowSideNavOverlay {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        @keyframes CloseSideNavOverlay {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+        &.closing {
+            animation: CloseSideNavOverlay 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+    }
+
+    .sidenav {
+        position: fixed;
+        top: 0;
+        right: 0;
+        margin: 25px;
+        width: 350px;
+        height: calc(102vh - 70px);
+        border-radius: 40px;
+        background-color: #fff;
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+        transform: translateX(100%);
+        transition: transform 0.3s ease-in-out;
+        z-index: 9999;
+        animation: ShowSideNav 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        @keyframes ShowSideNav {
+            0% {
+                transform: translateX(150%);
+            }
+            100% {
+                transform: translateX(0);
+            }
+        }
+        &.active {
+            transform: translateX(0);
+        }
+        @keyframes CloseSideNav {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(150%);
+            }
+        }
+        &.closing {
+            animation: CloseSideNav 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+        }
+    }
 }
 .home {
     position: absolute;
@@ -184,12 +260,11 @@
     .right {
         text-align: right;
         margin-left: auto;
-        margin-right: -50px; 
-        display: flex; 
+        margin-right: -50px;
+        display: flex;
         align-items: center;
     }
     .right svg {
-        margin-left: 50px; 
+        margin-left: 50px;
     }
-    
 }
