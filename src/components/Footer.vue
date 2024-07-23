@@ -3,7 +3,7 @@
       <div class="left">
         <div class="icons">
           <a target="_blank" href="https://github.com/xflesx69"><img id="button" src="/img/github.svg"></a>
-          <a target="_blank" href="https://discord.com/users/257252777930129408"><img height="20.64" id="button" src="/img/discord.svg"></a>
+          <a target="_blank" href="discord://-/users/257252777930129408"><img height="20.64" id="button" src="/img/discord.svg"></a>
         </div>
       </div>
       <div class="right">
