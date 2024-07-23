@@ -5,18 +5,21 @@
             <p class="desc">Website developer</p>
         </div>
         <div class="nav">
-            <a href="#" id="button" @click="ToggleSidenav()"><i id="button" class="fa-solid fa-bars"></i></a>
+            <a href="#" id="button" @click="ToggleSidenav()"><img id="button" src="/img/bars.svg"></a>
         </div>
         <div :class="{ 'overlay': true, 'active': SidenavOpen, 'closing': SidenavClosing }" @click="QuitSidenav()" v-if="SidenavOpen"></div>
         <div :class="{ 'sidenav': true, 'active': SidenavOpen, 'closing': SidenavClosing }" v-show="SidenavOpen">
+            <button id="button" class="close-btn" @click="QuitSidenav()">&#10005;</button>
+
             <ul>
-                <h3>Tóth Norbert</h3>
+                <h3>Tóth Norbert</h3><!-- 
                 <li>
-                    <span><router-link to="/">Home</router-link></span>
+                    <span><router-link to="/" :class="[$route.name == 'home' ? 'active' : '']">Home</router-link></span>
                 </li>
                 <li>
-                    <span><router-link to="/test">Teszt</router-link></span>
-                </li>
+                    <span><router-link to="/test" :class="[$route.name == 'test' ? 'active' : '']">Teszt</router-link></span>
+                </li> -->
+                <li>HAMAROSAN</li>
             </ul>
         </div>
     </main>
@@ -45,3 +48,14 @@ export default {
     }
 }
 </script>
+
+<style>
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+}
+</style>

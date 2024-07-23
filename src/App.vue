@@ -23,6 +23,11 @@ export default defineComponent({
     Header,
     Footer
   },
+  data() {
+    return {
+      routename: null
+    }
+  },
   setup() {
     const cursor = ref<HTMLElement | null>(null);
     let mouseX = 0;
@@ -77,7 +82,7 @@ export default defineComponent({
           cursor.value.style.width = '0px';
           cursor.value.style.height = '0px';
         }
-      }, 800); 
+      }, 800);
     };
 
     onMounted(() => {
@@ -90,10 +95,20 @@ export default defineComponent({
         }
       };
     });
-
     return {
       cursor,
     };
   },
 });
 </script>
+
+<style scoped>
+.language-button rect {
+  transition: transform 0.3s ease, fill 0.3s ease;
+}
+
+.language-button rect:hover {
+  transform: scale(1.1);
+  fill: lightblue;
+}
+</style>
