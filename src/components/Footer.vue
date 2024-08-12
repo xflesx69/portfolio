@@ -23,10 +23,9 @@
   </template>
   
   <script lang="ts">
-  import { defineComponent } from 'vue';
   import { changeLanguage, t } from '@/languages/i18n';
    
-  export default defineComponent({
+  export default {
     name: 'Footer',
     setup() {
       return {
@@ -34,5 +33,77 @@
         changeLanguage
       };
     }
-  });
+  };
   </script>
+
+
+<style lang="scss">
+.footer {
+  display: flex;
+  justify-content: space-between;    
+  align-items: flex-end;
+  padding: 1.3rem;
+  box-sizing: border-box;
+  color: white;
+  margin-top: auto;
+
+/*   @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    padding-top: 2rem;
+  } */
+
+  .left, .right {
+    display: flex;
+    align-items: flex-end;
+  }
+
+  .icons {
+    display: flex;
+    align-items: center;
+
+    a {
+      color: white;
+      margin: 0 0.5rem;
+      display: inline-flex;
+    }
+
+    img {
+      width: 24px;
+      height: 24px;
+      transition: transform 0.3s;
+    }
+
+    img:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .right {
+    margin-bottom: -1.3rem;
+    margin-right: -3rem;
+    svg {
+      margin-bottom: -3.3rem;
+      width: 100%;
+      max-width: 220px;
+      height: auto;
+    }
+
+    @media (max-width: 768px) {
+      margin-top: 1rem;
+    }
+  }
+
+  .language-selector {
+    width: 220px;
+    height: 100px;
+    display: block;
+    margin: 0 auto;
+
+    @media (max-width: 480px) {
+      width: 180px;
+      height: 80px;
+    }
+  }
+}
+</style>

@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <Header></Header>
-    <div class="cursor" ref="cursor"></div>
-    <RouterView v-slot="{ Component }">
-      <Transition name="grow-in">
-        <component :is="Component" />
-      </Transition>
-    </RouterView>
+    <div class="content">
+      <RouterView v-slot="{ Component }">
+        <Transition name="grow-in">
+          <component :is="Component" />
+        </Transition>
+      </RouterView>
+    </div>
     <Footer></Footer>
+    <div class="cursor" ref="cursor"></div>
   </div>
 </template>
 
@@ -22,11 +24,6 @@ export default defineComponent({
   components: {
     Header,
     Footer
-  },
-  data() {
-    return {
-      routename: null
-    }
   },
   setup() {
     const cursor = ref<HTMLElement | null>(null);
@@ -103,6 +100,36 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(to top left, #e7e7e7 0%, #f5f5f5 100%);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 25px;
+  border-radius: 15px;
+  min-height: calc(100vh - 50px);
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.cursor {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1.9px solid black;
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  transition: width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out;
+}
+
 .language-button rect {
   transition: transform 0.3s ease, fill 0.3s ease;
 }
@@ -110,5 +137,10 @@ export default defineComponent({
 .language-button rect:hover {
   transform: scale(1.1);
   fill: lightblue;
+}
+@media (max-width: 555px) {
+  .container {
+    min-height: calc(90vh - 50px);
+  }
 }
 </style>
