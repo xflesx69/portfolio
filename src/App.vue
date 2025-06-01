@@ -1,146 +1,181 @@
-<template>
-  <div class="container">
-    <Header></Header>
-    <div class="content">
-      <RouterView v-slot="{ Component }">
-        <Transition name="grow-in">
-          <component :is="Component" />
-        </Transition>
-      </RouterView>
-    </div>
-    <Footer></Footer>
-    <div class="cursor" ref="cursor"></div>
-  </div>
-</template>
-
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue';
-import { RouterView } from 'vue-router';
-import Header from '@/components/Header.vue';
-import Footer from '@/components/Footer.vue';
+import { defineComponent } from 'vue'
+import { RouterView } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
-  components: {
-    Header,
-    Footer
-  },
-  setup() {
-    const cursor = ref<HTMLElement | null>(null);
-    let mouseX = 0;
-    let mouseY = 0;
-    let hideTimeout: ReturnType<typeof setTimeout>;
+  components: { RouterView },
 
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.pageX;
-      mouseY = e.pageY;
-
-      if (cursor.value) {
-        cursor.value.style.left = `${mouseX}px`;
-        cursor.value.style.top = `${mouseY}px`;
-        cursor.value.style.transition = 'width 0.3s, height 0.3s, background-color 0.3s, border-width 0.3s';
-      }
-
-      const target = e.target as HTMLElement;
-      if (target) {
-        if (['A', 'SPAN', 'P', 'H1'].includes(target.tagName) || target.id === 'button') {
-          if (cursor.value) {
-            if (target.id === 'button' || ['G'].includes(target.tagName)) {
-              cursor.value.style.width = '35px';
-              cursor.value.style.height = '35px';
-              cursor.value.style.borderRadius = '50%';
-              cursor.value.style.borderWidth = '1.9px';
-              cursor.value.style.backgroundColor = '';
-            } else {
-              cursor.value.style.width = '.2px';
-              cursor.value.style.height = '15px';
-              cursor.value.style.borderRadius = '10%';
-              cursor.value.style.borderWidth = '.1px';
-              cursor.value.style.backgroundColor = 'black';
-            }
-          }
-        } else {
-          if (cursor.value) {
-            cursor.value.style.width = '15px';
-            cursor.value.style.height = '15px';
-            cursor.value.style.borderRadius = '50%';
-            cursor.value.style.borderWidth = '1.9px';
-            cursor.value.style.backgroundColor = '';
-          }
-        }
-      }
-
-      if (hideTimeout) {
-        clearTimeout(hideTimeout);
-      }
-
-      hideTimeout = setTimeout(() => {
-        if (cursor.value) {
-          cursor.value.style.width = '0px';
-          cursor.value.style.height = '0px';
-        }
-      }, 800);
-    };
-
-    onMounted(() => {
-      document.addEventListener('mousemove', handleMouseMove);
-
-      return () => {
-        document.removeEventListener('mousemove', handleMouseMove);
-        if (hideTimeout) {
-          clearTimeout(hideTimeout);
-        }
-      };
-    });
+  data() {
     return {
-      cursor,
-    };
+      animationId: 0 as number,
+      frame: 0 as number,
+      patternSize: 256,
+      patternScaleX: 3,
+      patternScaleY: 3,
+      patternRefreshInterval: 2,
+      patternAlpha: 30,
+      canvas: null as HTMLCanvasElement | null,
+      ctx: null as CanvasRenderingContext2D | null,
+      patternCanvas: null as HTMLCanvasElement | null,
+      patternCtx: null as CanvasRenderingContext2D | null,
+      patternData: null as ImageData | null,
+    }
   },
-});
+
+  methods: {
+    initCanvas() {
+      this.canvas = document.getElementById('noise-canvas') as HTMLCanvasElement
+      this.ctx = this.canvas.getContext('2d')!
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
+      this.ctx.scale(this.patternScaleX, this.patternScaleY)
+    },
+
+    initPattern() {
+      this.patternCanvas = document.createElement('canvas')
+      this.patternCanvas.width = this.patternSize
+      this.patternCanvas.height = this.patternSize
+      this.patternCtx = this.patternCanvas.getContext('2d')!
+      this.patternData = this.patternCtx.createImageData(this.patternSize, this.patternSize)
+    },
+
+    updatePattern() {
+      if (!this.patternData) return
+      const data = this.patternData.data
+      for (let i = 0; i < data.length; i += 4) {
+        const gray = 30 + Math.floor(Math.random() * 90)
+        data[i] = gray
+        data[i + 1] = gray
+        data[i + 2] = gray
+        data[i + 3] = this.patternAlpha
+      }
+      this.patternCtx!.putImageData(this.patternData, 0, 0)
+    },
+
+    draw() {
+      if (!this.ctx || !this.canvas || !this.patternCanvas) return
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+      const pattern = this.ctx.createPattern(this.patternCanvas, 'repeat')
+      if (pattern) {
+        this.ctx.fillStyle = pattern
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+      }
+    },
+
+    loop() {
+      this.frame++
+      if (this.frame % this.patternRefreshInterval === 0) {
+        this.updatePattern()
+        this.draw()
+      }
+      this.animationId = requestAnimationFrame(this.loop.bind(this))
+    },
+
+    disableContextMenu(e: MouseEvent) {
+      e.preventDefault()
+    },
+
+    onResize() {
+      if (!this.canvas || !this.ctx) return
+      this.canvas.width = window.innerWidth
+      this.canvas.height = window.innerHeight
+      this.ctx.setTransform(1, 0, 0, 1, 0, 0)
+      this.ctx.scale(this.patternScaleX, this.patternScaleY)
+    }
+  },
+
+  mounted() {
+    this.initCanvas()
+    this.initPattern()
+    this.updatePattern()
+    this.draw()
+    this.loop()
+
+    window.addEventListener('contextmenu', this.disableContextMenu)
+    window.addEventListener('resize', this.onResize)
+  },
+
+  beforeUnmount() {
+    cancelAnimationFrame(this.animationId)
+    window.removeEventListener('contextmenu', this.disableContextMenu)
+    window.removeEventListener('resize', this.onResize)
+  }
+})
 </script>
 
+<template>
+  <canvas id="noise-canvas" class="noise-bg"></canvas>
+  <div class="container">
+    <Transition name="rotate">
+      <div class="border" :key="$route.fullPath">
+        <RouterView class="view" />
+      </div>
+    </Transition>
+  </div>
+</template>
+
 <style scoped>
+.noise-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  user-select: none;
+}
+
 .container {
+  position: relative;
+  z-index: 1;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  background: linear-gradient(to top left, #e7e7e7 0%, #f5f5f5 100%);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 25px;
-  border-radius: 15px;
-  min-height: calc(100vh - 50px);
-}
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  perspective: 1200px;
 
-.content {
-  flex-grow: 1;
-  padding: 20px;
-}
+  .border {
+    border: 48px solid #eee;
+    border-image: url(/image/title-card.svg) 44 stretch;
+    box-shadow: 0 6rem 3rem -4rem black;
+    text-align: center;
+    max-width: 26rem;
+    width: 100%;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
 
-.cursor {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  border: 1.9px solid black;
-  position: absolute;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 10000;
-  transition: width 0.1s ease-out, height 0.1s ease-out, border-radius 0.1s ease-out;
-}
-
-.language-button rect {
-  transition: transform 0.3s ease, fill 0.3s ease;
-}
-
-.language-button rect:hover {
-  transform: scale(1.1);
-  fill: lightblue;
-}
-@media (max-width: 555px) {
-  .container {
-    min-height: calc(90vh - 50px);
+    .view {
+      background-color: #333;
+      padding: 0rem;
+    }
   }
+}
+
+.rotate-enter-active, .rotate-leave-active {
+  transition: transform 1s cubic-bezier(.55,0,.1,1);
+  will-change: transform;
+}
+
+.rotate-enter-from {
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+}
+.rotate-enter-to {
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+}
+.rotate-leave-from {  
+  transform: rotateY(0deg);
+  backface-visibility: hidden;
+}
+.rotate-leave-to {
+  transform: rotateY(-180deg);
+  backface-visibility: hidden;
 }
 </style>
