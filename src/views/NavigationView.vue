@@ -7,7 +7,7 @@ export default {
         { to: '/projects', label: 'Projects' },
       ],
       hoveredIndex: null,
-      charRotations: {}
+      charRotations: {},
     }
   },
   created() {
@@ -24,6 +24,7 @@ export default {
       this.internalLinks.forEach((item, index) => {
         this.charRotations[index] = this.generateRotationArray(item.label.length)
       })
+      this.charRotations['contact'] = this.generateRotationArray('Contact'.length)
       this.charRotations['github'] = this.generateRotationArray('Github'.length)
     },
     handleMouseEnter(index) {
@@ -40,8 +41,6 @@ export default {
 }
 </script>
 
-
-
 <template>
   <main>
     <div class="container">
@@ -55,7 +54,7 @@ export default {
             <span class="anaglyph-layer">{{ char }}</span>
           </span>
         </router-link>
-        <a href="mailto:info@xflesx.hu" target="_blank" @mouseenter="handleMouseEnter('Contact')"
+        <a href="mailto:info@xflesx.hu" target="_blank" @mouseenter="handleMouseEnter('contact')"
           @mouseleave="handleMouseLeave">
           <span v-for="(char, i) in splitChars('Contact')" :key="i" class="char char-wrapper"
             :style="{ transform: `rotate(${getCharRotation('contact', i)}deg)` }">
@@ -103,6 +102,10 @@ export default {
       position: relative;
       color: white;
       font-size: 1.3em;
+      backface-visibility: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      will-change: transform;
     }
   }
 }

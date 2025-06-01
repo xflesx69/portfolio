@@ -115,7 +115,6 @@ export default {
                 }
 
                 a {
-                    color: #007bff;
                     text-decoration: none;
 
                     &:hover {
@@ -134,6 +133,7 @@ export default {
                 img {
                     max-width: 100%;
                     border-radius: 8px;
+                    filter: grayscale(100%) /* drop-shadow(1px 0px 0 cyan) drop-shadow(-1.5px 0px 0 red) */;
                 }
             }
         }
