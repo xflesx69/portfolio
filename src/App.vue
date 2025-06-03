@@ -157,6 +157,33 @@ export default defineComponent({
   }
 }
 
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+    
+    .border {
+      border-width: 32px;
+      max-width: 90%;
+      margin: auto;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    .border {
+      border-width: 24px;
+      max-width: 95%;
+    }
+  }
+}
+
+@media (hover: none) {
+  .container {
+    perspective: 800px;
+  }
+}
+
 .rotate-enter-active, .rotate-leave-active {
   transition: transform 1s cubic-bezier(.55,0,.1,1);
   will-change: transform;
