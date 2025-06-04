@@ -20,7 +20,7 @@ export default {
       return str.split('')
     },
     generateRotationArray(length) {
-      return Array.from({ length }, () => Math.floor(Math.random() * 15 - 10))
+      return Array.from({ length }, () => Math.floor(Math.random() * 15 - 5))
     },
     generateAllRotations() {
       this.internalLinks.forEach((item, index) => {
@@ -29,7 +29,9 @@ export default {
       this.charRotations['contact'] = this.generateRotationArray('Contact'.length)
       this.charRotations['github'] = this.generateRotationArray('Github'.length)
     },
+
     handleMouseEnter(index, event) {
+      this.$PlayHoverSound()
       this.hoveredIndex = index
       this.hoverImageVisible = true
 
@@ -39,7 +41,8 @@ export default {
         top: targetRect.top - 15,
         left: targetRect.left - 5
       }
-    },
+    }
+    ,
     handleMouseLeave() {
       this.hoveredIndex = null
       this.hoverImageVisible = false
@@ -58,7 +61,7 @@ export default {
       <img src="/image/logo.png" width="300" />
       <div class="navigation">
         <router-link v-for="(text, index) in internalLinks" :key="index" :to="text.to"
-          @mouseenter="e => handleMouseEnter(index, e)" @mouseleave="handleMouseLeave">
+          @mouseenter="e => handleMouseEnter(index, e)" @mouseleave="handleMouseLeave" @click="$PlayClickSound">
           <span v-for="(char, i) in splitChars(text.label)" :key="i" class="char char-wrapper"
             :style="{ transform: `rotate(${getCharRotation(index, i)}deg)` }">
             <span class="outline-layer">{{ char }}</span>
@@ -67,7 +70,7 @@ export default {
         </router-link>
 
         <a href="mailto:info@xflesx.hu" target="_blank" @mouseenter="e => handleMouseEnter('contact', e)"
-          @mouseleave="handleMouseLeave">
+          @mouseleave="handleMouseLeave" @click="$PlayClickSound">
           <span v-for="(char, i) in splitChars('Contact')" :key="i" class="char char-wrapper"
             :style="{ transform: `rotate(${getCharRotation('contact', i)}deg)` }">
             <span class="outline-layer">{{ char }}</span>
@@ -76,7 +79,7 @@ export default {
         </a>
 
         <a href="https://github.com/xflesx69" target="_blank" @mouseenter="e => handleMouseEnter('github', e)"
-          @mouseleave="handleMouseLeave">
+          @mouseleave="handleMouseLeave" @click="$PlayClickSound">
           <span v-for="(char, i) in splitChars('Github')" :key="i" class="char char-wrapper"
             :style="{ transform: `rotate(${getCharRotation('github', i)}deg)` }">
             <span class="outline-layer">{{ char }}</span>
@@ -117,6 +120,10 @@ export default {
       font-weight: bold;
     }
 
+    a:active {
+      transform: scale(0.95);
+    }
+
     .char {
       display: inline-block;
       transition: transform 0.3s ease;
@@ -131,17 +138,20 @@ export default {
   position: fixed;
   width: 48px;
   pointer-events: none;
-  animation: float 2s ease-in-out infinite;
+  animation: float 1s ease-in-out infinite;
   transform: rotate(90deg) scaleX(-1);
   z-index: 1000;
 }
 
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0px) rotate(90deg) scaleX(-1);
   }
+
   50% {
-    transform: translateX(20px) rotate(90deg) scaleX(-1);
+    transform: translateX(10px) rotate(90deg) scaleX(-1.05);
   }
 }
 </style>

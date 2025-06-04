@@ -46,7 +46,7 @@ export default {
                         <h2>{{ project.title }}</h2>
                         <span v-if="project.year">Year: {{ project.year }}</span>
                         <p>{{ project.description }}</p>
-                        <a :href="project.link" target="_blank" v-if="project.link">View Project</a>
+                        <a :href="project.link" target="_blank" v-if="project.link" @mouseenter="$PlayHoverSound()" @click="$PlayClickSound">View Project</a>
                     </div>
                     <div class="right">
                         <img v-if="project.image" :src="project.image" alt="Project Image" />
@@ -55,7 +55,7 @@ export default {
             </div>
 
             <RouterLink to="/">
-                <span class="char-wrapper back">
+                <span class="char-wrapper back" @mouseenter="$PlayHoverSound()" @click="$PlayClickSound()">
                     <span class="anaglyph-layer">Back</span>
                 </span>
             </RouterLink>

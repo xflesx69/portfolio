@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { RouterView } from 'vue-router'
+import { RouterView, useRoute } from 'vue-router'
 
 export default defineComponent({
   name: 'App',
@@ -20,7 +20,13 @@ export default defineComponent({
       patternCanvas: null as HTMLCanvasElement | null,
       patternCtx: null as CanvasRenderingContext2D | null,
       patternData: null as ImageData | null,
+      isMusicPlaying: false as boolean,
     }
+  },
+
+  setup() {
+    const route = useRoute();
+    return { route };
   },
 
   methods: {
@@ -82,7 +88,23 @@ export default defineComponent({
       this.canvas.height = window.innerHeight
       this.ctx.setTransform(1, 0, 0, 1, 0, 0)
       this.ctx.scale(this.patternScaleX, this.patternScaleY)
+    },
+
+    toggleMusic() {
+      const audio = this.$refs.backgroundMusic as HTMLAudioElement
+      if (!audio) return
+
+      audio.volume = 0.3
+
+      if (this.isMusicPlaying) {
+      audio.pause()
+      } else {
+      audio.play().catch(e => console.warn("Autoplay block or error:", e))
+      }
+
+      this.isMusicPlaying = !this.isMusicPlaying
     }
+
   },
 
   mounted() {
@@ -94,6 +116,14 @@ export default defineComponent({
 
     window.addEventListener('contextmenu', this.disableContextMenu)
     window.addEventListener('resize', this.onResize)
+
+    const global = this.$.appContext.config.globalProperties
+    if (global?.$_clickSoundRef && global?.$_hoverSoundRef) {
+      global.$_clickSoundRef.value = this.$refs.clickSound as HTMLAudioElement
+      global.$_hoverSoundRef.value = this.$refs.hoverSound as HTMLAudioElement
+    } else {
+      console.warn('Globális ref nem található – lehet, hogy a main.ts-ben hiányzik.')
+    }
   },
 
   beforeUnmount() {
@@ -105,14 +135,27 @@ export default defineComponent({
 </script>
 
 <template>
+  <audio ref="clickSound" src="/sounds/click.mp3" preload="auto"></audio>
+  <audio ref="hoverSound" src="/sounds/button-click-hover.mp3" preload="auto"></audio>
+  <audio ref="backgroundMusic" src="/music/LeafRag.mp3" preload="auto" loop></audio>
   <canvas id="noise-canvas" class="noise-bg"></canvas>
   <div class="container">
     <Transition name="rotate">
-      <div class="border" :key="$route.fullPath">
+      <div class="border" :key="route.fullPath">
         <RouterView class="view" />
       </div>
     </Transition>
   </div>
+
+  <button class="music-toggle" @click="toggleMusic">
+    <svg v-if="isMusicPlaying" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="white">
+      <rect x="6" y="5" width="4" height="14" />
+      <rect x="14" y="5" width="4" height="14" />
+    </svg>
+    <svg v-else xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="white">
+      <polygon points="5,3 19,12 5,21" />
+    </svg>
+  </button>
 </template>
 
 <style scoped>
@@ -157,10 +200,45 @@ export default defineComponent({
   }
 }
 
+.music-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #222;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 1rem;
+  z-index: 1001;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-toggle:hover {
+  background-color: #444;
+}
+
+.music-toggle:active {
+  transform: scale(0.95);
+}
+
+@media (max-width: 600px) {
+  .music-toggle {
+    bottom: 15px;
+    right: 15px;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+}
+
 @media (max-width: 768px) {
   .container {
     padding: 0 1rem;
-    
+
     .border {
       border-width: 32px;
       max-width: 90%;
@@ -184,8 +262,9 @@ export default defineComponent({
   }
 }
 
-.rotate-enter-active, .rotate-leave-active {
-  transition: transform 1s cubic-bezier(.55,0,.1,1);
+.rotate-enter-active,
+.rotate-leave-active {
+  transition: transform 1s cubic-bezier(.55, 0, .1, 1);
   will-change: transform;
 }
 
@@ -193,14 +272,17 @@ export default defineComponent({
   transform: rotateY(180deg);
   backface-visibility: hidden;
 }
+
 .rotate-enter-to {
   transform: rotateY(0deg);
   backface-visibility: hidden;
 }
-.rotate-leave-from {  
+
+.rotate-leave-from {
   transform: rotateY(0deg);
   backface-visibility: hidden;
 }
+
 .rotate-leave-to {
   transform: rotateY(-180deg);
   backface-visibility: hidden;

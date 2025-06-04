@@ -24,7 +24,7 @@ export default {
                 collaborating with others to bring ideas to life.</p>
                 
             <RouterLink to="/">
-                <span class="char-wrapper back">
+                <span class="char-wrapper back" @mouseenter="$PlayHoverSound()" @click="$PlayClickSound()">
                     <span class="anaglyph-layer">Back</span>
                     <!-- <span class="outline-layer">Back</span> -->
                 </span>
